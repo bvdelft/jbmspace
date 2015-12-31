@@ -1,0 +1,73 @@
+
+/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:391
+        return doneCallback(null, Buffer.concat([sizeBuffer, stringToBuffer(pa
+                                         ^
+TypeError: Object function Buffer(subject, encoding, offset) {
+  if (!(this instanceof Buffer)) {
+    return new Buffer(subject, encoding, offset);
+  }
+
+  var type;
+
+  // Are we slicing?
+  if (typeof offset === 'number') {
+    this.length = coerce(encoding);
+    this.parent = subject;
+    this.offset = offset;
+  } else {
+    // Find the length
+    switch (type = typeof subject) {
+      case 'number':
+        this.length = coerce(subject);
+        break;
+
+      case 'string':
+        this.length = Buffer.byteLength(subject, encoding);
+        break;
+
+      case 'object': // Assume object is an array
+        this.length = coerce(subject.length);
+        break;
+
+      default:
+        throw new Error('First argument needs to be a number, ' +
+                        'array or string.');
+    }
+
+    if (this.length > Buffer.poolSize) {
+      // Big buffer, just alloc one.
+      this.parent = new SlowBuffer(this.length);
+      this.offset = 0;
+
+    } else {
+      // Small buffer.
+      if (!pool || pool.length - pool.used < this.length) allocPool();
+      this.parent = pool;
+      this.offset = pool.used;
+      pool.used += this.length;
+      if (pool.used & 7) pool.used = (pool.used + 8) & ~7;
+    }
+
+    // Treat array-ish objects as a byte array.
+    if (isArrayIsh(subject)) {
+      for (var i = 0; i < this.length; i++) {
+        this.parent[i + this.offset] = subject[i];
+      }
+    } else if (type == 'string') {
+      // We are a string
+      this.length = this.write(subject, 0, encoding);
+    }
+  }
+
+  SlowBuffer.makeFastBuffer(this.parent, this, this.offset, this.length);
+} has no method 'concat'
+    at /home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:391:42
+    at Object.encodePacket (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:76:10)
+    at encodeOne (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:381:13)
+    at /home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:250:5
+    at map (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:257:5)
+    at Object.encodePayloadAsBinary (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:405:3)
+    at Object.encodePayload (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/node_modules/engine.io-parser/lib/index.js:219:20)
+    at XHR.send (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/lib/transports/polling.js:215:10)
+    at Socket.flush (/home/bart/nowplease/jbmspace/node_modules/socket.io/node_modules/engine.io/lib/socket.js:333:20)
+    at XHR.emit (events.js:88:20)

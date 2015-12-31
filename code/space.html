@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JBM SPACE</title>
+
+
+	<script src="lib/jquery/jquery.js"></script>
+	<script src="lib/three/three.js"></script>
+	<script src="lib/socket.io/socket.io.js"></script>
+
+	<script src="util/functions.js"></script>
+	<script src="util/logger.js"></script>
+	<script src="util/types.js"></script>
+
+	<script src="controller/events/keyboardListener.js"></script>
+	<script src="controller/events/mouseListener.js"></script>
+	<script src="controller/renderer/renderer.js"></script>
+	<script src="controller/renderer/imageController.js"></script>
+	<script src="controller/network/NetworkSocket.js"></script>
+	<script src="controller/network/SocketManager.js"></script>
+	<script src="controller/network/PlayerClient.js"></script>
+	<script src="controller/network/GameHost.js"></script>
+	<script src="controller/audio/audioPool.js"></script>
+	<script src="controller/audio/audioController.js"></script>
+
+	<script src="entities/EntityFactory.js"></script>
+	<script src="entities/entity.js"></script>
+	<script src="entities/player.js"></script>
+	<script src="entities/world.js"></script>
+	<script src="entities/Building.js"></script>
+	<script src="entities/bullet.js"></script>
+	<script src="entities/cactus.js"></script>
+	<script src="entities/castle.js"></script>
+
+	<script src="game/CollisionController.js"></script>
+	<script src="game/game-controller.js"></script>
+	<script src="game/menu.js"></script>
+	<script src="game/HUD.js"></script>
+	<script src="game/userSettings.js"></script>
+	<script src="game/level.js"></script>
+	<script src="game/game.js"></script>
+
+	<script src="game/CollisionEvents/BulletBulletCollision.js"></script>
+	<script src="game/CollisionEvents/BulletCactusCollision.js"></script>
+	<script src="game/CollisionEvents/BulletPlayerCollision.js"></script>
+	<script src="game/CollisionEvents/CactusPlayerCollision.js"></script>
+	<script src="game/CollisionEvents/PlayerPlayerCollision.js"></script>
+	<script src="game/CollisionEvents/BulletCastleCollision.js"></script>
+	<script src="game/CollisionEvents/CastlePlayerCollision.js"></script>
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" type="text/css" href="style/canvas.css">
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<link rel="stylesheet" type="text/css" href="style/menu.css">
+	<link rel="stylesheet" type="text/css" href="style/hud.css">
+
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+	<div id="space-container"></div>
+</body>
+
+<script>
+	logger.level = 3;
+	var menu = new Menu($('#space-container'));
+	if (location.href.indexOf("?SP") > 0) {
+		menu.singlePlayer();
+	}
+</script>
+
+</html>

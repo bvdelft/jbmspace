@@ -1,0 +1,14 @@
+body {
+    overflow: hidden;
+}
+
+@font-face {
+    font-family: Exo;
+    src: url('../../assets/fonts/Exo/Exo-Black.ttf');
+}
+
+@font-face {
+    font-family: Exo;
+    font-weight: bold;
+    src: url('../../assets/fonts/Exo/Exo-ExtraBold.ttf');
+}

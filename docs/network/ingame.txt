@@ -1,0 +1,51 @@
+This document lays down the messages sent and received between 
+
+2) Host -- the browser window that serves as the host of the game
+3) Client / Player -- a browser window that serves as a player in the game
+
+via the underlying low-level protocol. The code handling these messages can
+(mainly) be found in
+ - code/controller/network/client/PlayerClient.js
+ - code/controller/network/host/GameHost.js
+
+Message:     player_joined
+Attribute:   name :: String
+Description: Send from Host to a Player that 'name' has joined, they
+  should all register the new Player.
+
+Message:     player_left
+Attribute:   name :: String
+Description: Send from Host to a Player that 'name' has left, they should
+  all remove that Player.
+
+Message:     req_part_update
+Attribute:   lag :: Int
+Description: Send from Host to a Player to request that the Player answers with
+  a "part_update" message. Attribute is latency received by last request for a
+  partial update.
+
+Message:     part_update
+Attribute:   -- possible empty subset of "full_update" atttribute
+Description: Send from Player to Host. Contains all update-data that has been
+  marked as 'outdated' by the Player, i.e. local information that has changed
+  and not yet been sent to the Host.
+  Also send from Host to Player to notify them of changes, with attributes:
+  { name :: String // entity / player for whom to update
+  , data :: Any    // Partial update data for that entity
+  }
+
+Message:     req_full_update
+Attribute:   -
+Description: Send from Host to a Player to request that the Player answers with
+  a "full_update" message.
+
+Message:     full_update
+Attribute:   { loc :: Array [ Int, Int, Int ]
+             , chatmsg :: String
+             }
+Description: Send from Player to Host, giving its complete state (independent
+  of whether information is marked as 'outdated' or not.
+  Also send from Host to Player to notify them of changes, with attributes:
+  { name :: String // entity / player for whom to update
+  , data :: Any    // Full update data for that entity
+  }

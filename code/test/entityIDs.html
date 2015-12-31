@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test - EntityIDs - JBM SPACE</title>
+
+
+	<script src="../lib/jquery/jquery.js"></script>
+	<script src="../lib/three/three.js"></script>
+	<script src="../lib/socket.io/socket.io.js"></script>
+
+	<script src="../util/functions.js"></script>
+	<script src="../util/logger.js"></script>
+
+	<script src="../controller/events/keyboardListener.js"></script>
+	<script src="../controller/events/mouseListener.js"></script>
+	<script src="../controller/renderer/renderer.js"></script>
+	<script src="../controller/renderer/imageController.js"></script>
+	<script src="../controller/network/NetworkSocket.js"></script>
+	<script src="../controller/network/SocketManager.js"></script>
+	<script src="../controller/network/PlayerClient.js"></script>
+	<script src="../controller/network/GameHost.js"></script>
+	<script src="../controller/audio/audioPool.js"></script>
+	<script src="../controller/audio/audioController.js"></script>
+
+	<script src="../entities/EntityFactory.js"></script>
+	<script src="../entities/entity.js"></script>
+	<script src="../entities/player.js"></script>
+	<script src="../entities/world.js"></script>
+	<script src="../entities/Building.js"></script>
+	<script src="../entities/bullet.js"></script>
+
+	<script src="../game/game-controller.js"></script>
+	<script src="../game/menu.js"></script>
+	<script src="../game/HUD.js"></script>
+	<script src="../game/userSettings.js"></script>
+	<script src="../game/level.js"></script>
+	<script src="../game/game.js"></script>
+
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" type="text/css" href="../style/canvas.css">
+	<link rel="stylesheet" type="text/css" href="../style/style.css">
+	<link rel="stylesheet" type="text/css" href="../style/hud.css">
+
+	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+	<link href='http://fonts.googleapis.com/css?family=Exo:400,900' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <h1>JBM SPACE - Test</h1>	
+  <p> Test runs on <tt>http://jbmspace.nowplea.se:5050/</tt>
+	</p>
+	<p> Testing entity IDs.
+	</p>
+	<!-- Remove any running games from test server to prevent clashes. -->
+	<iframe src="http://jbmspace.nowplea.se:5050/?killall=1"></iframe>
+	<div style="position: absolute; top: 20px; right: 20px; color: #000; z-index: 100000; background: #eee; width: 100px; border: solid black 1px;">
+		Info:<br/>
+		FPS: <span id="FPS-span"></span><br/>
+		nObjects: <span id="nobjects"></span>
+	</div>
+
+	<div id="space-container">
+		<canvas id="space-canvas"></canvas>
+		<div id="messageBoard"></div>
+		<div id="space-menu"></div>
+	</div>
+	
+</body>
+
+	<script>
+	
+		SocketManager.connect("http://jbmspace.nowplea.se:5050/");
+		logger.level = 5;
+		
+		function clientBart() {
+			var networkSocket = new NetworkSocket("bart", function() {
+					logger.log("html.clientBart", "Joined game.");
+					clientJeroen();
+				});
+			networkSocket.login("bart","vendis", function () {
+					logger.log("html.bart", "Logged in.");
+					networkSocket.joinGame("TestGame");
+				});
+		}
+		
+		function clientJeroen() {
+			var networkSocket = new NetworkSocket("jeroen", function() {
+					logger.log("html.clientJeroen", "Joined game.");
+				});
+			networkSocket.login("jeroen","snake", function () {
+					logger.log("html.jeroen", "Logged in.");
+					networkSocket.joinGame("TestGame");
+				});
+		}
+		
+		function host() {
+			var networkSocket = new NetworkSocket("host", function() {
+					logger.log("html.host", "Game created.");
+					clientBart();
+				});
+			logger.log("html.host", "Logging in.");
+			networkSocket.login("host","ghost", function () {
+					logger.log("html.host", "Logged in.");
+					networkSocket.createGame("TestGame");
+				});
+		}
+		
+		function start() {
+			setTimeout(host,200);
+		}
+		
+		function gameStarted(networkSocket) {
+
+			var game = new Game($('#space-canvas')[0],networkSocket.player);
+			game.load();
+			var gameLoader = window.setInterval(function() {
+				logger.log("html.gameStarted.gameLoader", "Still loading");
+				if(game.ready()) {
+					window.clearInterval(gameLoader);
+					logger.log("html.gameStarted.gameLoader", "Everything loaded...");					
+					EntityFactory.setImageController(game.imageController);
+					networkSocket.player.readyToReceive();
+				}
+			}, 1000);
+
+			$('#space-menu').hide();
+		}
+		
+		
+		function gameStartedHost() {
+			logger.log("html.gameStarted", "Connected, created game");
+
+			gamectrl = new GameController(undefined, undefined);
+			gamectrl.isServer = true;
+			networkSocket.host.setGameController(gamectrl);
+			gamectrl.load();
+			
+			
+			var w = new World();
+			w.__id = freshID();
+			gamectrl.addEntity(w);
+			
+		}
+		
+		start();
+	</script>
+
+</html>

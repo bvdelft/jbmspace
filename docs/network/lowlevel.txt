@@ -1,0 +1,100 @@
+This document lays down the messages sent and received between 
+
+1) Server -- the machine serving as proxy running node.js. It manages who is
+   logged in, who is hosting or playing which game and the forwarding of
+   messages of each game between host and players
+2) Host -- the browser window that serves as the host of the game
+3) Client / Player -- a browser window that serves as a player in the game
+
+The handling of these messages can (mainly) be found in
+ - proxy/space.js
+ - code/controller/network/NetworkManager.js
+
+Host and Client could be separate connections, i.e. separate browser windows,
+but currently the player hosting a game automatically joins as well.
+An individual connection, in an individual browser window, is identified by
+an individual *socket*. That is, a socket is disconnected and lost whenver the
+browser window is closed or refreshed.
+
+Message:     login
+Attribute:   { username :: String
+               password :: String
+             }
+Description: Received by Server from a socket as a request to log in. A
+  successful login attempt will remain valid for as long as the socket lasts.
+  The Server respondes with "login_ok" or "login_failed", with no additional
+  parameters.
+
+Message:     new_game
+Attribute:   name :: String
+Description: Received by Server from a logged-in socket to start a new game.
+  The Server responds with "game_created" or "not_logged_in" if the socket has
+  not yet logged in. After game creation this socket will now receive all Host
+  messages, the first one being "player_joined" for its own socket.
+
+Message:     list_games
+Attribute:   -
+Description: Send by socket to request the list of games currently managed by
+  the Server. The Server responds with "games_list" and attribute 
+  "{ all_games :: Array [ { id :: int, name :: String } ] }
+
+Message:     join
+Attribute:   gameid :: int
+Description: Send by socket desiring to be a Client in game with the specified
+  game id. Server respondes with "joined_game", "no_such_game" or 
+  "not_logged_in". From now this socket will receive Client messages for this
+  game.
+
+Message:     player_joined
+Attribute:   name :: String
+Description: Send from Server to Host whenever a player joined the game. The
+  attribute serves as the identifier for this player.
+
+Message:     player_left
+Attribute:   name :: String
+Description: Send from Server to Host whenever a player drops out of the game,
+  identified by its name. Currently the only way to leave a game is by 
+  disconnecting the socket, possibly we introduce a request to leave a game
+  but remain logged in.
+
+Message:     host_disconnected
+Attribute:   -
+Description: Send from Server to all Clients in a game when the socket with the
+  Host of the game is lost. This ends the game
+
+Message:     killed
+Attribute:   -
+Description: Send to a socket when the same user is logged in elsewhere. Perhaps
+  should include IP-address of new logged in location.
+
+Message:     forwardHC
+Attribute:   data :: Any
+Description: Received by Server from Host, forward given data to all Clients of
+  the game hosted by Host. On failure responds to the Host with either 
+  "illegal_host" if the socket is not a host, "not_in_game" if the socket is
+  associated with any game, "not_logged_in" if the socket is not logged in.
+  On succes, the Player receives the data as a "forwardHC" message.
+
+Message:     forwardHSingleC
+Attribute:   player :: String
+             data :: Any
+Description: Received by Server from Host, forwards given data to the player
+  specified by the first string-argument. On failure responds to Host with
+  "no_such_player", "illegal_host", "not_in_game" or "not_logged_in".
+  On succes, the Player receives the data-attribute as a "forwardHC" message.
+
+Message:     forwardHExceptC
+Attribute:   player :: String
+             data :: Any
+Description: Received by Server from Host, forwards given data to all players
+  except the one specified. On failure responds to the Host with
+  "no_such_player", "illegal_host", "not_in_game" or "not_logged_in".
+  On succes, the Player receives the data-attribute as a "forwardHC" message.
+
+Message:     forwardCH
+Attribute:   data :: Any
+Description: Received by Server from Player, forwards given data to the Host of
+  the game the player is in. On failure responds to Player with "not_in_game" or
+  "not_logged_in". On success the Host receives a "forwardCH" message with as
+  attribute "{ name :: String, data :: Any }" where name is the identifier of
+  the Player who sent the data.

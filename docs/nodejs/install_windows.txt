@@ -1,0 +1,15 @@
+Ga naar nodejs.org
+Click op install, laat alle opties standaard
+
+Open command prompt in mapje met space.js
+
+npm install socket.io
+node space.js 2345
+
+OF 
+
+"C:/Program Files/nodejs/npm" install socket.io
+"C:/Program Files/nodejs/node" space.js 2345
+
+Check of het werkt en bezoek
+http://localhost:2345

@@ -1,0 +1,1 @@
+alert("Regular module test!");

@@ -1,0 +1,63 @@
+.hud {
+    *position: absolute;
+    top: 0px;
+    left: 0px;*/
+    width: 0; /** If we draw this over canvas the keybaord and mouse listeners don't work anymore */
+    height: 0;
+    z-index: 2;
+    display: none;
+}
+
+
+.hud .tableview {
+    position: absolute;
+    z-index: 20;
+    top: 20px;
+    left: 20px;
+    color: #000;
+    background: rgba(255, 255, 255, 0.7);
+    width: 400px;
+		height: 200px;
+    padding: 5px;
+    border: solid black 1px;
+    border-radius: 10px;
+    font-family: Exo;
+    font-size: 14px;
+		overflow: auto;
+}
+.hud table  tr {
+	height: 15px;
+}
+
+.score {
+    position: absolute;
+    z-index: 20;
+    bottom: 20px;
+    left: 20px;
+    color: #000;
+    background: rgba(255, 255, 255, 0.7);
+    width: 180px;
+		height: 100px;
+    padding: 5px;
+    border: solid black 1px;
+    border-radius: 10px;
+    font-family: Exo;
+    font-size: 14px;
+		overflow: auto;
+		display: none;
+}
+
+.renderInfo {
+    position: absolute;
+    z-index: 20;
+    top: 20px;
+    right: 20px;
+    color: #000;
+    background: rgba(255, 255, 255, 0.7);
+    width: 100px;
+    padding: 5px;
+    border: solid black 1px;
+    border-radius: 10px;
+    font-family: Exo;
+    font-size: 14px;
+}

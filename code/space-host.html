@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JBM SPACE - HOST</title>
+	<script src="lib/jquery/jquery.js"></script>
+	<script src="lib/three/three.js"></script>
+	<script src="lib/socket.io/socket.io.js"></script>
+
+	<script src="util/functions.js"></script>
+	<script src="util/logger.js"></script>
+	
+	<script src="controller/events/keyboardListener.js"></script>
+	<script src="controller/events/mouseListener.js"></script>
+	<script src="controller/renderer/renderer.js"></script>
+	<script src="controller/renderer/imageController.js"></script>
+	<script src="controller/network/NetworkSocket.js"></script>
+	<script src="controller/network/SocketManager.js"></script>
+	<script src="controller/network/PlayerClient.js"></script>
+	<script src="controller/network/GameHost.js"></script>
+	<script src="controller/audio/audioPool.js"></script>
+	<script src="controller/audio/audioController.js"></script>
+	
+	<script src="entities/EntityFactory.js"></script>
+	<script src="entities/entity.js"></script>
+	<script src="entities/player.js"></script>
+	<script src="entities/world.js"></script>
+	<script src="entities/Building.js"></script>
+	<script src="entities/bullet.js"></script>
+
+	<script src="game/game-controller.js"></script>
+	<script src="game/menu.js"></script>
+	<script src="game/level.js"></script>
+	<script src="game/game.js"></script>
+	<link rel="stylesheet" type="text/css" href="style/bartstyle.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+	<h1>JBM SPACE - Host</h1>
+	
+	<div id="login">
+		<input type="text" id="server" style="width: 250px" value="http://jbmspace.nowplea.se:2345/" />
+		<button onclick="login('host','ghost')">Login</button>
+	</div>
+	<div id="gamelist" style="display: none">		
+		<input type="text" id="newGameName" />
+		<button onclick='networkSocket.createGame(document.getElementById("newGameName").value, gameStarted)'>New Game</button>
+	</div>
+	
+
+</body>
+	<script>
+    logger.level = 4;
+		var networkSocket;
+		
+		function login(u,p) {
+			SocketManager.connect("http://jbmspace.nowplea.se:5050/");
+      networkSocket = new NetworkSocket('host', gameStarted);
+			networkSocket.login(u,p);
+			$('#login')[0].style.display = 'none';
+			$('#gamelist')[0].style.display = 'block';
+		}
+		
+		function gameStarted() {
+			logger.log("html.gameStarted", "Connected, created game");
+
+			gamectrl = new GameController(undefined, undefined);
+			gamectrl.isServer = true;
+			networkSocket.host.setGameController(gamectrl);
+			gamectrl.load();
+			
+			
+			var w = new World();
+			w.__id = freshID();
+			gamectrl.addEntity(w);
+			
+		}
+	</script>
+
+</html>

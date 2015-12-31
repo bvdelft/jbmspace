@@ -1,0 +1,10 @@
+sudo apt-get install nodejs 
+sudo apt-get install nodejs-legacy  // for some os es
+sudo apt-get install npm
+
+cd jbmspace/proxy
+npm install socket.io
+node space.js 2345
+
+Check of het werkt en bezoek
+http://localhost:2345/

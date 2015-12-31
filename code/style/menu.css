@@ -1,0 +1,136 @@
+.space-menu-wrap {
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/img/menu/space2.jpg');
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-family: 'Exo', sans-serif;
+    z-index: 4;
+}
+
+.space-menu {
+}
+
+.loading-menu {
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/img/menu/space2.jpg');
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-family: 'Exo', sans-serif;
+    z-index: 3;
+}
+
+.menu-button {
+    width: 250px;
+    font-size: 18px;
+    font-family: 'Exo', sans-serif;
+    font-weight: bold;
+    margin: 20px auto;
+    display: block;
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid green;
+    color: green;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.menu-button:hover {
+    background-color: rgba(255,255,255,0.8);
+    cursor: pointer;
+}
+
+.specialmenu {
+    border: 1px solid blue;
+    color: blue;
+}
+
+.jbmspace-header { /* for boths in space-menu as in loading-menu */
+    color: white;
+    font-size: 44px;
+    padding: 10px;
+}
+
+.loading-menu .jbmspace-header {
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+}
+
+.loading-menu .loading-header {
+    bottom: 30px;
+    left: 10px;
+    position: absolute;
+    color: white;
+    padding: 10px;
+}
+
+.menu-settings-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    height: 83px;
+    background-image: url('../../assets/img/menu/cogs-transparent.png');
+}
+
+.menu-settings-button:hover {
+    background-image: url('../../assets/img/menu/cogs-less-transparent.png');
+    cursor: pointer;
+}
+
+.menu-footer {
+    color: white;
+    font-size: 16px;
+    font-style: italic;
+
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.menu-options {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-family: 'Exo', sans-serif;
+    z-index: 4;
+    color: white;
+    font-size: 18px;
+    width: 340px;
+		left: 50%;
+		top: 100px;
+    margin-left: -170px;
+    text-align: left;
+}
+
+.menu-options label {
+    float: left;
+    width: 80px;
+    padding: 5px;
+    margin-right: 20px;
+}
+
+.menu-options input, .menu-options select {
+    background-color: rgba(255,255,255,0.2);
+    border: 0px solid black;
+    font-size: 18px;
+    font-family: Exo;
+    color: white;
+}
+
+.menu-options option {
+    background-color: rgba(0,0,0,0.8);
+    border: 0px solid black;
+    font-size: 18px;
+    font-family: Exo;
+    color: white;
+}
+
+
