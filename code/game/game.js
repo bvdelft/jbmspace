@@ -27,11 +27,11 @@ function Game(menu, playerClient) {
 	 * Creates one client, with special name 'singlePlayer'
 	 **/
 	if (typeof this.playerClient == "undefined") {
-        logger.info("Game", "Game got no playerClient, going for single player.");
+		logger.info("Game", "Game got no playerClient, going for single player.");
 		this.playerClient = new PlayerClient("singlePlayer", "singlePlayer");
 	}
 	
-    logger.log("Game", "Initialised game for client " + this.playerClient.name + ".");
+	logger.log("Game", "Initialised game for client " + this.playerClient.name + ".");
 	
 	// So that the network may make calls to addEntity etc.
 	this.playerClient.setGame(this);
@@ -69,20 +69,21 @@ function Game(menu, playerClient) {
 		this.keyboardListener.onKeyChange('A', function(b) { player.left(b); });
 		this.keyboardListener.onKeyChange('D', function(b) { player.right(b); });
 		this.mouseListener.onMouseMove(function(x, y) {
-			player.mouseMovementListener(self, x,y)
+			player.mouseMovementListener(self, x,y);
 		});
-		this.mouseListener.addMouseClick(function(x,y){self.audioController.laser.get();
-                self.fire();
-            });
+		this.mouseListener.addMouseClick(function(x,y) {
+			self.audioController.laser.get();
+			self.fire();
+		});
 		
 		logger.log("Game.initPlayer", "Client received own player; listeners added.");
 	}
 
-    // moet waarschijnlijk ergens anders heen...
-    this.fire = function() {
-        var bullet = new Bullet(this.player.loc.slice(), this.player.ori.slice(), 0.01, this.player.__id);
-        this.requestEntity(bullet.__func, bullet.__args, bullet.getInitData());
-    }
+	// moet waarschijnlijk ergens anders heen...
+	this.fire = function() {
+		var bullet = new Bullet(this.player.loc.slice(), this.player.ori.slice(), 0.01, this.player.__id);
+		this.requestEntity(bullet.__func, bullet.__args, bullet.getInitData());
+	}
 	
 	
 	/**
@@ -103,11 +104,8 @@ function Game(menu, playerClient) {
 	 * Returns true when preloading is finished.
 	 **/
 	this.ready = function() {
-		if(!this.audioController.ready())
-			return false;
-		if(!this.imageController.ready())
-			return false;
-		return true;
+		return this.audioController.ready()
+			&& this.imageController.ready();
 	}
 	
 	/**
